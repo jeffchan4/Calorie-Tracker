@@ -1,0 +1,63 @@
+body{
+    text-align:center;
+}
+h3{
+    
+    color:blanchedalmond;
+    font-size: 70px; 
+}
+
+p{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 24px;
+    color: rgb(244, 215, 176);
+    width: 300px;
+    border: 5px solid rgb(248, 218, 179);
+    padding: 20px;
+    margin:0 auto;
+    border-radius:20px;
+}
+.button{
+    color:rgb(247, 213, 170);
+    position: relative top;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    font-size: 24px;
+    border: 5px solid rgb(247, 219, 183);
+    border-radius:20px;
+    margin:0 auto;
+    padding:10px;
+    
+}
+.button:hover{
+    font-size:35px;
+    background-color: rgb(12, 227, 12);
+    transition: background-color 1s;
+}
+@keyframes scrollBg {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-330px);
+    }
+}
+
+.scroll-bg {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    padding-bottom: 330px;
+    background-color: #E8BA9B;
+    background-image: url("https://andreivictor.ro/codepen/scroll-bg-animation-pinterest/bg_pasta_grid-3f880df3.jpg");
+    background-size: cover;
+    animation: scrollBg 35s linear infinite;
+    z-index: -1;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 150px 0; /* Add padding to keep content visible */
+}
+

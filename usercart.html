@@ -1,0 +1,203 @@
+<html class="all">
+    
+    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/usercart_style.css') }}" />
+    <div class="title">
+        <p class="intro">Hello, {{name}}! You're logged in! Email: {{email}}</p>
+        <div class="flex">
+        <div><p>Google Profile Picture:</p><br>
+        <img src="{{profile_pic}}" alt="Google profile pic"></img></div><br>
+        <a class="button" href="/logout">Logout</a>
+        </div>
+    </div>
+    <div class="main">
+    <div>
+        <div>
+        <h1>Add Food to Your Cart</h1><br>
+        <!-- <input id="foodName" type="text" name="food_name" placeholder="food name"><br>
+         -->
+        <select id="foodName"></select><br><br>
+        <script>
+            const select = document.getElementById('foodName');
+            const optionsData = ['Artichoke','Arugula','Asparagus','Aubergine','Beetroot','Bell Pepper','Black Olives','Broccoli','Brussels Sprouts','Cabbage','Capsicum','Carrot','Cauliflower','Celery','Chard','Cherry Tomato','Chicory','Chinese Cabbage','Chives','Collard Greens','Corn','Courgette','Creamed Spinach','Cucumber','Eggplant','Endive','Fennel','Garlic','Gherkin','Gourd','Green Beans','Green Olives','Green Onion','Horseradish','Kale','Kohlrabi','Kumara','Leek','Lettuce','Mushrooms','Mustard Greens','Nori','Okra','Olives','Onion','Parsnips','Peas','Pepper','Potato','Pumpkin','Radishes','Red Cabbage','Rutabaga','Shallots','Spinach','Squash','Sweet Potato','Tomato','Turnip Greens','Turnips','Wasabi','Winter Squash','Zucchini','Acai','Apple','Applesauce','Apricot','Avocado','Banana','Blackberries','Blood Oranges','Blueberries','Cantaloupe','Cherries','Clementine','Cranberries','Currants','Custard Apple','Dates','Figs','Fruit salad','Grapes','Greengage','Guava','Jackfruit','Jujube','Kiwi','Lemon','Lime','Lychees','Mandarin Oranges','Mango','Minneola','Mulberries','Nectarine','Olives','Orange','Papaya','Passion Fruit','Peach','Pear','Persimmon','Physalis','Pineapple','Plantains','Plum','Pomegranate','Quince','Raisins','Rambutan','Raspberries','Rhubarb','Starfruit','Strawberries','Tamarind','Tangerine','Watermelon','Baby Back Ribs','Bacon and Eggs','Baked Beans','BBQ Ribs','Beef Stew','Biryani','Black Pudding','Black Rice','BLT','Brown Rice','Burrito','Butter Chicken','California Roll','Chicken Caesar Salad','Chicken Fried Steak','Chicken Marsala','Chicken Parmesan','Chicken Pot Pie','Chicken Tikka Masala','Chili con Carne','Chimichanga','Cobb Salad','Collard Greens','Corn Dog','Corned Beef Hash','Cottage Pie','Dal','Deviled Eggs','Dim Sum','Dosa','Enchiladas','Fajita','Fish and Chips','Fried Rice','Fried Shrimp','Grilled Cheese Sandwich','Ham and Cheese Sandwich','Hummus','Jambalaya','Kebab','Lasagne','Mac and Cheese','Macaroni and Cheese','Mashed Potatoes','Meat Pie','Meatloaf','Naan','Orange Chicken','Pad Thai','Paella','Paratha','Pea Soup','Peanut Butter Sandwich','Peking Duck','Philly Cheese Steak','Pizza','Pork Chop','Potato Salad','Pulled Pork Sandwich','Ramen','Ravioli','Reuben Sandwich','Roast Beef','Roast Dinner','Samosa','Sausage Roll','Sausage Rolls','Shepherds Pie','Shrimp Cocktail','Sloppy Joe','Sloppy Joes','Spaghetti Bolognese','Spring Roll','Spring Rolls','Taco','Tandoori Chicken','Yorkshire Pudding','Amaranth','Barley','Barley Groats','Brown Rice','Buckwheat','Buckwheat Groats','Corn Waffles','Cornmeal','Cornstarch','Couscous','Cracker','Durum Wheat Semolina','Flaxseed','Freekeh','Gluten','Grissini','Kamut','Millet','Millet Flour','Millet Gruel','Oat Bran','Pearl Barley','Polenta','Prawn Crackers','Pretzel Sticks','Quinoa','Rusk','Rye Bran','Sago','Savoury Biscuits','Shortbread','Spelt','Spelt Bran','Spelt Semolina','Sunflower Seeds','Tortilla','Tortilla Chips','Wheat Bran','Wheat Germ','Wheat Gluten','Wheat Semolina','Wheat Starch','Whole Grain Wheat','Wholegrain Oat','Almond Oil','Apricot Kernel Oil','Argan Oil','Avocado Oil','Babassu Oil','Canola Oil','Coconut Oil','Corn Oil','Cottonseed Oil','Flaxseed Oil','Grape Seed Oil','Hazelnut Oil','Linseed Oil','Menhaden Oil','Mustard Oil','Oat Oil','Olive Oil','Palm Kernel Oil','Palm Oil','Peanut Oil','Poppy Seed Oil','Pumpkin Seed Oil','Rice Bran Oil','Safflower Oil','Salmon Oil','Sesame Oil','Shea Oil','Soy Oil','Sunflower Oil','Tomato Seed Oil','Vegetable Oil','Walnut Oil','Wheat Germ Oil','Alphabet Soup','Bean Stew','Beef Bouillon','Beef Noodle Soup','Beef Soup','Bouillon','Broccoli Cheese Soup','Broccoli Soup','Cabbage Soup','Carrot Ginger Soup','Carrot Soup','Chicken Bouillon','Chicken Broth','Chicken Gumbo Soup','Chicken Noodle Soup','Chicken Stock','Chicken Vegetable Soup','Chicken with Rice Soup','Cream of Asparagus Soup','Cream of Broccoli Soup','Cream of Celery Soup','Cream of Chicken Soup','Cream of Mushroom Soup','Cream of Onion Soup','Cream of Potato Soup','Creamy Chicken Noodle Soup','French Onion Soup','Golden Mushroom Soup','Goulash','Instant Ramen','Lentil Soup','Lobster Bisque Soup','Meatball Soup','Minestrone','Mushroom Soup','Noodle Soup','Onion Soup','Oxtail Soup','Pea Soup','Potato Soup','Pumpkin Soup','Ramen','Scotch Broth','Succotash','Thai Soup','Tomato Rice Soup','Tomato Soup','Vegetable Beef Soup','Vegetable Broth','Vegetable Soup','Vegetable Stock','Wedding Soup','Baskin-Robbins','Ben and Jerry‚Äôs','Butter Pecan Ice Cream','Carvel','Chocolate Chip Ice Cream','Chocolate Ice Cream','Ciao Bella','Coffee Ice Cream','Cold Stone Creamery','Cookie Dough Ice Cream','Crunchie McFlurry','Dairy Milk McFlurry','Dippin Dots','Double Rainbow','Drumsticks','French Vanilla Ice Cream','Friendly‚Äôs','Healthy Choice','Hot Fudge Sundae','Ice Cream Sandwich','Ice Cream Sundae','Ice Milk','Magnolia','Magnum','Magnum Almond','Magnum Double Caramel','Magnum Double Chocolate','Magnum Gold','Magnum White','McFlurry','McFlurry Oreo','Mini Milk','Mint Chocolate Chip Ice Cream','Rocky Road Ice Cream','Schwan‚Äôs','Smarties McFlurry','Snickers Ice Cream','Soft Serve','Solero','Strawberry Ice Cream','Strawberry Sundae','Sundae','Turkey Hill','Vanilla Cone','Vanilla Ice Cream','Cannelloni','Capellini','Cappelletti','Cellophane Noodles','Cheese Tortellini','Dampfnudel','Dumpling Dough','Durum Wheat Semolina','Egg Noodles','Farfalle','Fettuccine','Fusilli','Glass Noodles','Lasagne Sheets','Linguine','Low Carb Pasta','Macaroni','Manicotti','Mostaccioli','Orecchiette','Orzo','Penne','Penne Rigate','Pierogi','Ravioli','Rigatoni','Rotini','Shells','Shirataki Noodles','Soy Noodles','Spaetzle','Spaghetti','Spinach Tortellini','Spirelli','Tagliatelle','Tortellini','Vermicelli','Whole Grain Noodles','Whole Grain Spaghetti','Ziti','BBQ Chicken Pizza','BBQ Pizza','Beef Pizza','Bianca Pizza','Buffalo Chicken Pizza','Calabrese Pizza','Calzone','Capricciosa Pizza','Cheese Pizza','Chicken Pizza','Deep Dish Pizza','Dominos Philly Cheese Steak Pizza','Four Cheese Pizza','Goat Cheese Pizza','Grilled Pizza','Hawaiian Pizza','Margherita Pizza','Mozzarella Pizza','Mushroom Pizza','Napoli Pizza','New York Style Pizza','Pepperoni Pizza','Pizza Dough','Pizza Hut Stuffed Crust Pizza','Pizza Hut Supreme Pizza','Pizza Rolls','Quattro Formaggi Pizza','Red Pepper Pizza','Salami Pizza','Sausage Pizza','Seafood Pizza','Shrimp Pizza','Sicilian Pizza','Spinach Feta Pizza','Spinach Pizza','Stuffed Crust Pizza','Tarte Flamb√©e','Thin Crust Pizza','Tuna Pizza','Vegetable Pizza','Vegetarian Pizza','Veggie Pizza','White Pizza','Acerola','Asian Pear','Avocado','Banana','Breadfruit','Cantaloupe Melon','Casaba Melon','Cherimoya','Dragon Fruit','Durian','Feijoa','Galia Melon','Grapefruit','Guava','Honeydew','Jackfruit','Kiwi','Kumquat','Lychee','Mandarin Oranges','Mango','Mangosteen','Maracuya','Maraschino Cherries','Muskmelon','Noni','Passion Fruit','Pineapple','Pink Grapefruit','Plantain','Pomegranate','Pomelo','Prickly Pear','Rambutan','Sapodilla','Soursop Fruit','Star Fruit','Tamarind','Watermelon','Arby‚Äôs Grand Turkey Club','Arby‚Äôs Reuben','Arby‚Äôs Roast Beef Classic','Arby‚Äôs Roast Beef Max','BBQ Rib','Bean Burrito','Big N‚Äô Tasty','Bratwurst','Burger King Angry Whopper','Burger King Double Whopper','Burger King Double Whopper with Cheese','Burger King Original Chicken Sandwich','Burger King Premium Alaskan Fish Sandwich','Burger King Triple Whopper','Burger King Whopper','Burger King Whopper Jr.','Burger King Whopper with Cheese','Cheeseburger','Chicken Breast','Chicken Fajita','Chicken McNuggets','Chicken Nuggets','Chicken Pizziola','Chicken Sandwich','Chicken Teriyaki Sandwich','Chicken Wings','Chop Suey','Curly Fries','Double Cheeseburger','Egg Roll','Falafel','Filet-o-Fish','Fish and Chips','Fish Sandwich','French Fries','Grilled Chicken Salad','Ham Sandwich','Hamburger','Hot Dog','Italian BMT','Lasagna','McDonald‚Äôs Big Mac','McDonald‚Äôs Cheeseburger','McDonald‚Äôs Chicken Nuggets','McDonald‚Äôs Double Cheeseburger','McDonald‚Äôs Filet-o-Fish','McDonald‚Äôs McChicken','McDonald‚Äôs McDouble','McDonald‚Äôs McMuffi Egg','McDonald‚Äôs McRib','McDonald‚Äôs Mighty Wings','McRib','Meatball Sandwich','Nachos with Cheese','Onion Rings','Poutine','Smoked Salmon','Spicy Italian','Subway Club Sandwich','Tortilla Wrap','Tuna','Turkey','Veggie Burger','Veggie Delight','Veggie Patty','Wendy‚Äôs Baconator','Wendy‚Äôs Jr. Bacon Cheeseburger','Wendy‚Äôs Jr. Cheeseburger','Wendy‚Äôs Son of Baconator','Whopper','Zinger','Zinger Burger'];
+
+            // Iterate over the optionsData and create <option> elements
+            optionsData.forEach(value => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                select.appendChild(option);
+            });
+
+        </script>
+        </div>
+        <div>
+        <input id="servingNum" type="number" name="servings" placeholder="serving number"><br><br>
+        </div>
+        <button id="addFood"  >ADD FOOD </button><br><br>
+        <!-- <button id="undoFood" onclick="undoFood()" >UNDO </button><br><br>
+        <button id="delFood" onclick="delFood()" >DELETE FOOD </button><br><br> <br> -->
+        <!-- <script>
+
+            function addFood(){
+                // Get a reference to the list
+                var myCart = document.getElementById("cart1");
+                var newFood = document.getElementById("foodName");
+                var newServings=document.getElementById("servingNum");
+                var newFoodValue= newFood.value;
+                var newServingsValue= newServings.value;
+                // Create a new list item
+                var newItem = document.createElement("li");
+    
+                newItem.textContent = `${newFoodValue}: ${newServingsValue} servings`;
+                myCart.appendChild(newItem)
+                // list.appendChild(newItem);
+            }
+            function undoFood() {
+                var foodList = document.getElementById("cart1");
+                var lastItem = foodList.lastElementChild; 
+                foodList.removeChild(lastItem);
+            }
+            function delFood(){
+                var foodList = document.getElementById("cart1");
+                var targetFood = document.getElementById("foodName");
+                const targetFoodValue = targetFood.value.trim();
+                // Get a list of all <li> items inside the <ul>
+                const liItems = foodList.getElementsByTagName('li');
+    
+                // Loop through the <li> items and find the one with a matching value
+                for (let i = 0; i < liItems.length; i++) {
+                    const liItemValue = liItems[i].textContent.trim();
+    
+                    if (liItemValue === targetFoodValue) {
+                        // Remove the matching <li> item
+                        foodList.removeChild(liItems[i]);
+                        break; // Stop the loop after removal
+                    }
+                }
+            }
+        </script> -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            const userId = "{{id}}";
+            let formattedItem; // Declare formattedItem in a wider scope
+        
+            $(document).ready(function() {
+                $('#addFood').click(function() {
+                    const foodName = $('#foodName').val();
+                    const foodServing = $('#servingNum').val();
+        
+                    if (foodName && foodServing) {
+                        formattedItem = `${foodName}: ${foodServing} servings`;
+                        const itemNames = [];
+                        itemNames.push(formattedItem);
+        
+                        console.log(itemNames);
+                        console.log(formattedItem); // Access formattedItem here
+                        console.log(foodName);
+                        console.log(foodServing);
+        
+                        $.ajax({
+                            type: 'POST',
+                            url: '/insert_items',
+                            data: JSON.stringify({ userId: userId, items: itemNames }),
+                            contentType: 'application/json',
+                            success: function(data) {
+                                $('#result').text(data.message);
+                                const debugInfo = `User ID: ${userId}<br>Item Names: ${itemNames.join(', ')}`;
+                                $('#debug-info').html(debugInfo);
+                            },
+                            error: function(error) {
+                                console.error('Error:', error);
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+        
+    
+    </div>
+    
+    <form id="insert-form">
+                 
+        <h1>Today's Foods</h1>
+        <ul id="cart1" class="cart" style = "position:relative; list-style-position: inside;">
+            
+            
+        </ul>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: '/current_cart',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        var dataList = response.data;
+                        var ul = $('#cart1');
+
+                        dataList.forEach(function(item) {
+                            ul.append('<li>' + item.foodname + ' - ' + item.serving + '</li>');
+                        });
+
+                    },
+                    error: function(error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            });
+
+        </script>
+        
+    </form>
+    <div id="message"></div>
+    <form id="calendar-form">
+    <div id="result"></div>
+    <div id="debug-info"></div> <!-- Add a new div for debugging -->
+
+    <form action="/calculate" method="POST">
+    <h1>Food Log</h1>
+    <label >Start date:</label>
+    <input type="date" id="start_date" name="trip-start" value="2023-01-01" min="2023-01-01" max="2023-12-31" /><br>
+    <label >End date:</label>
+    <input type="date" id="end_date" name="trip-end" value="2023-01-01" min="2023-01-01" max="2023-12-31" /><br>
+    <button id="calendar-button" type="button">Calculate Avg Cal</button>
+    <div id="avg-calories"></div>
+    <div id="display-food-log"></div>
+    </form>
+    </div>
+
+    
+    
+   
+    <script id="range-date">
+        $(document).ready(function(){
+            $("#calendar-button").click(function(){
+
+            
+                var startdate=$("#start_date").val();
+                var enddate=$("#end_date").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/calculate",
+                    data: {
+                        startdate: startdate,
+                        enddate: enddate
+                    },
+                    success: function(response){
+                        var formattedResponse = JSON.stringify(response, null, 2); // Convert dictionary to formatted JSON string
+                        $("#display-food-log").html("<pre>" + formattedResponse + "</pre>");
+                        // $("#avg-calories").html(avgcalories)
+                    },
+                    error: function(error){
+                        $("#display-food-log").html("an error occurred ");
+                    }
+                });
+            });
+        });
+
+    </script>
+    
+</html>

@@ -4,7 +4,8 @@ import os
 import sqlite3
 import pandas as pd ##csv library
 from datetime import date
-
+import time
+import threading
 
 # Third party libraries
 from flask import Flask, redirect, request, url_for, render_template,jsonify
@@ -22,9 +23,24 @@ import requests
 from db import init_db_command
 from user import User
 
-today=date.today()
+today = None
+
+# Function to update the date in the background
+def update_date():
+    global today  # Use the global variable
+    
+    while True:
+        today = date.today()  # Update the global variable
+        print("Today's date:", today)
+        time.sleep(60)
+
+# Create a separate thread for date updating
+date_update_thread = threading.Thread(target=update_date)
+date_update_thread.daemon = True
+date_update_thread.start()
 
 df = pd.read_csv('foodandcalories.csv')
+
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
@@ -72,11 +88,12 @@ def load_user(user_id):
 @app.route("/")
 def index():
     if current_user.is_authenticated:
-        return render_template('usercart.html' ,id=current_user.id, name=current_user.name, email=current_user.email, profile_pic=current_user.profile_pic)
+        
+        return render_template('usercart.html', id=current_user.id, name=current_user.name, email=current_user.email, profile_pic=current_user.profile_pic)
 
             
     else:
-        return render_template('login.html')
+        return render_template('user_login.html')
 
 
 @app.route("/login")
@@ -168,6 +185,19 @@ def logout():
     logout_user()
     return redirect(url_for("index"))
 
+@app.route("/current_cart")
+def current_cart():
+    user = User(
+        id_=current_user.id, name=current_user.name, email=current_user.email, profile_pic=current_user.profile_pic
+    )
+        
+    current_cart = User.get_cart(today)  # Assuming `today` is correctly defined
+
+    cart_list = [{"foodname": foodname, "serving": serving} for foodname, serving in current_cart]
+    return jsonify(data=cart_list)
+
+        
+
 @app.route("/insert_items", methods=['POST'])
 def insert_items():
     
@@ -180,8 +210,8 @@ def insert_items():
         user_id = data['userId']
         item_names = data['items']
         
-
-        
+        print(item_names)
+        print(today)
         # conn=db_connection()
         # cursor = conn.cursor()
         user_id_to_query=user_id
@@ -192,8 +222,11 @@ def insert_items():
         # Assuming you have a "items" table with "user_id" and "item_name" columns
         for item_name in item_names:
             items = item_name.split(':')
+            print(items)
             food_name = items[0]
+            print(food_name)
             serving_num = items[1].replace("servings",'').strip()
+            print(serving_num)
             User.insert(user_id_to_query,food_name,serving_num,today)
             
 
@@ -206,51 +239,52 @@ def calculate():
     user = User(
         id_=current_user.id, name=current_user.name, email=current_user.email, profile_pic=current_user.profile_pic
     )
-    try:
+    # try:
         
-        start_date=request.form.get("startdate")
-        end_date=request.form.get("enddate")
+    start_date=request.form.get("startdate")
+    end_date=request.form.get("enddate")
 
-        fetched_data= User.calculate(start_date,end_date)
-        
-        
-        total=0
-        total_cal_days={}
-        response = {}
-        for date, food_name, servings in fetched_data:
-            print(str(date),food_name,servings)
-            date=str(date)
-            if date not in response:
-                total_cal_days[date]=[]
-                response[date] = []
-            response[date].append({'food_name': food_name, 'servings': servings, 'totalcal': calc_total_cal(food_name,int(servings))})
-            total_cal_days[date].append(calc_total_cal(food_name,int(servings)))
-        print(response)
-        
-        avgcalories=[{date:sum(total_cal_days[date])} for date in total_cal_days]
-        print(avgcalories)
-        
-        for item in avgcalories:
-            for date in item:
-                total+=item[date]
-        print(total)
-        total=total/len(avgcalories)
-        print(total)
+    fetched_data= User.calculate(start_date,end_date)
+    print(fetched_data)
+    
+    total=0
+    total_cal_days={}
+    response = {}
+    for date, food_name, servings in fetched_data:
+        print(str(date),food_name,servings)
+        date=str(date)
+        if date not in response:
+            total_cal_days[date]=[]
+            response[date] = []
+        response[date].append({'food_name': food_name, 'servings': servings, 'totalcal': calc_total_cal(food_name,int(servings))})
+        total_cal_days[date].append(calc_total_cal(food_name,int(servings)))
+    print(total_cal_days)
+    print(response)
+    
+    avgcalories=[{date:sum(total_cal_days[date])} for date in total_cal_days]
+    print(avgcalories)
+    
+    for item in avgcalories:
+        for date in item:
+            total+=item[date]
+    print(total)
+    total=total/len(avgcalories)
+    print(total)
 
-
-        return jsonify({'Food Log':response,'Total Calories':avgcalories,'avg calorie per day':total})
-    except Exception as e:
-        return jsonify({'error': str(e)})
+    
+    return jsonify({'Food Log':response,'Total Calories':avgcalories,'avg calorie per day':total})
+    # except Exception as e:
+    #     return jsonify({'error': str(e)})
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
 def calc_total_cal(food,servings):
-    searchstring = food.lower()
-    searchstring=searchstring.capitalize()
+    
     startindex=0
+    print(df.loc[startindex]['Food'])
     while startindex<=len(df):
-        if  df.loc[startindex]['Food']== searchstring:
+        if  df.loc[startindex]['Food']== food:
             break
         startindex+=1
     
