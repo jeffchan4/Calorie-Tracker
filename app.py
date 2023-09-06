@@ -32,7 +32,7 @@ def update_date():
     while True:
         today = date.today()  # Update the global variable
         print("Today's date:", today)
-        time.sleep(60)
+        time.sleep(600)
 
 # Create a separate thread for date updating
 date_update_thread = threading.Thread(target=update_date)
@@ -276,6 +276,20 @@ def calculate():
     # except Exception as e:
     #     return jsonify({'error': str(e)})
 
+@app.route("/delete_food", methods=['POST'])
+def delete_food():
+    user = User(
+        id_=current_user.id, name=current_user.name, email=current_user.email, profile_pic=current_user.profile_pic
+    )
+    data=request.get_json()
+    print(data)
+    food=data['foodName']
+    serving=data['foodServing']
+    print(food)
+    print(serving)
+
+    User.delete_food(food,serving,today)
+    return jsonify(message='Items was DELETED')
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 

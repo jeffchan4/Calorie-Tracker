@@ -37,7 +37,17 @@ class User(UserMixin):
         if date_ is None:
             return None
         return date_[0]
+    def get_cart(date):
+        db = get_db()
+        print(date)
+        cart_ = db.execute(
+        "SELECT name, serving FROM food WHERE date = ?", (date,)
+    ).fetchall()
 
+
+        if cart_ is None:
+            return None
+        return cart_
 
     @staticmethod
     def create(id_, name, email, profile_pic):
@@ -83,7 +93,7 @@ class User(UserMixin):
             (food,serving,cart_id[0],date)
         )
         db.commit()
-        
+        print('insert was successful')
     @staticmethod
     def calculate(start,end):
         db=get_db()
@@ -103,3 +113,18 @@ class User(UserMixin):
 
         # return food_list
         return food
+    
+    @staticmethod
+    def delete_food(food, serving, today):
+        db = get_db()
+        db.execute("""
+            DELETE FROM food
+            WHERE ROWID IN (
+                SELECT ROWID
+                FROM food
+                WHERE name = ? AND serving = ? AND date = ?
+                LIMIT 1
+            )
+        """, (food, serving, today))
+
+        db.commit()  # Don't forget to commit the changes to the database

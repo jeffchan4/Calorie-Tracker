@@ -35,8 +35,8 @@
         <input id="servingNum" type="number" name="servings" placeholder="serving number"><br><br>
         </div>
         <button id="addFood"  >ADD FOOD </button><br><br>
-        <!-- <button id="undoFood" onclick="undoFood()" >UNDO </button><br><br>
-        <button id="delFood" onclick="delFood()" >DELETE FOOD </button><br><br> <br> -->
+        <!-- <button id="undoFood" onclick="undoFood()" >UNDO </button><br><br> -->
+        <button id="delFood" >DELETE FOOD </button><br><br> <br>
         <!-- <script>
 
             function addFood(){
@@ -82,21 +82,21 @@
             const userId = "{{id}}";
             let formattedItem; // Declare formattedItem in a wider scope
         
+            
             $(document).ready(function() {
                 $('#addFood').click(function() {
                     const foodName = $('#foodName').val();
                     const foodServing = $('#servingNum').val();
-        
+
                     if (foodName && foodServing) {
                         formattedItem = `${foodName}: ${foodServing} servings`;
                         const itemNames = [];
                         itemNames.push(formattedItem);
-        
-                        console.log(itemNames);
-                        console.log(formattedItem); // Access formattedItem here
-                        console.log(foodName);
-                        console.log(foodServing);
-        
+
+                        // Clear the UL before making the AJAX request
+                        var ul = $('#cart1');
+                        ul.empty();
+
                         $.ajax({
                             type: 'POST',
                             url: '/insert_items',
@@ -106,6 +106,9 @@
                                 $('#result').text(data.message);
                                 const debugInfo = `User ID: ${userId}<br>Item Names: ${itemNames.join(', ')}`;
                                 $('#debug-info').html(debugInfo);
+
+                                // After the POST request, fetch and update the cart data
+                                updateCart();
                             },
                             error: function(error) {
                                 console.error('Error:', error);
@@ -113,7 +116,52 @@
                         });
                     }
                 });
+
+                $('#delFood').click(function() {
+                    const foodName = $('#foodName').val();
+                    const foodServing = $('#servingNum').val();
+                    var ul = $('#cart1');
+                    ul.empty();
+                    $.ajax({
+                        type: 'POST',
+                        url: "/delete_food",
+                        data: JSON.stringify({ foodName: foodName, foodServing: foodServing }),
+                        contentType: 'application/json',
+                        success: function(data) {
+                            // Call updateCart() here after the successful AJAX request
+                            updateCart();
+                        },
+                        error: function(error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                });
+
+
+                // Function to fetch and update the cart data
+                function updateCart() {
+                    $.ajax({
+                        url: '/current_cart',
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(response) {
+                            var dataList = response.data;
+                            var ul = $('#cart1');
+
+                            dataList.forEach(function(item) {
+                                ul.append('<li>' + item.foodname + ' - ' + item.serving + ' servings' + '</li>');
+                            });
+                        },
+                        error: function(error) {
+                            console.error('Error fetching data:', error);
+                        }
+                    });
+                }
+
+                // Initialize the cart data when the page loads
+                // updateCart();
             });
+
         </script>
         
     
@@ -138,7 +186,7 @@
                         var ul = $('#cart1');
 
                         dataList.forEach(function(item) {
-                            ul.append('<li>' + item.foodname + ' - ' + item.serving + '</li>');
+                            ul.append('<li>' + item.foodname + ' - ' + item.serving + ' servings' +'</li>');
                         });
 
                     },
