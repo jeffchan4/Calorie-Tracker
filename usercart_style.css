@@ -1,7 +1,13 @@
+.winnie{
+    width: 110px;
+    height: 90px;
+}
 select {
+    
     width: 100%;
     padding:10px;
     border-radius:10px;
+    
 
 }
 #servingNum{
@@ -22,7 +28,7 @@ select {
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size:30px;
 }
-#undoFood{
+/* #undoFood{
     font-family: 'Courier New', Courier, monospace;
     font-weight:bolder;
     padding:10px;
@@ -35,7 +41,7 @@ select {
     transition: background-color 1s;
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size:30px;
-}
+} */
 #delFood{
     font-family: 'Courier New', Courier, monospace;
     font-weight:bolder;
@@ -56,10 +62,20 @@ select {
 }
 .intro{
     
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-size: 30px;
-    color: brown;
+    font-family:'Courier New', Courier, monospace;
+    font-size: 35px;
+    color: black;
     
+}
+.below-intro{
+    
+    font-size:11px;
+    color:black;
+    font-family:Verdana, Geneva, Tahoma, sans-serif
+}
+.profilepic{
+    max-width: 30%;
+    max-height: 30% 
 }
 .flex{
     display:flex;
@@ -73,14 +89,17 @@ select {
     padding:10px;
     border-radius: 20px;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-size:20px;
-    color:darkmagenta;
+    font-size:15px;
+    color:black;
     background-color: lightcoral;
 }
 .button:hover{
-    font-size:30px;
+    
     background-color:red;
     transition: background-color 1s;
+}
+.button:focus{
+    outline:none;
 }
 #submit-button{
     font-size:20px;
@@ -93,28 +112,31 @@ select {
     background-color: skyblue;
     transition: background-color  border-color 1s;
 }
-.all{
-    background-image: url(https://media.giphy.com/media/jKaFXbKyZFja0/giphy.gif);
-    background-position:center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-color: rgb(255, 183, 49);
-    background-size:auto;
-    
-}
+
 
 .main{
     display:flex;
-    
-    justify-content: space-around;
-    position: relative; top :300px;
-    
+    /* border:6px solid black; */
+    justify-content: center;
+    align-items:center;
+    position:static;
+    flex-direction: column-reverse;
+    /* Center the flex container horizontally */
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+
+    /* Additional styles as needed */
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
 }
 h1{
     color:rgb(150, 146, 146);
     font-size:30px;
 }
 ul {
+    list-style-type: none;
     border:2px solid black;
     display: flex;
     flex-direction: column;
@@ -122,6 +144,25 @@ ul {
     padding:10px;
     border-radius: 15px;
     list-style: square;
+    align-items: center;
+}
+
+
+li {
+    list-style: none;
+    font-size: 16px;
+    margin: 5px 0; /* Spacing between list items */
+    padding: 10px; /* Padding inside list items */
+    border: 1px solid #ddd; /* Border around list items */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #f9f9f9; /* Background color */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+}
+
+/* Hover effect */
+li:hover {
+    background-color: #e0e0e0; /* Lighter background color on hover */
+    transform: scale(1.02); /* Slight scale increase on hover */
 }
 
 

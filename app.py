@@ -192,8 +192,8 @@ def current_cart():
     )
         
     current_cart = User.get_cart(today)  # Assuming `today` is correctly defined
-
-    cart_list = [{"foodname": foodname, "serving": serving} for foodname, serving in current_cart]
+    
+    cart_list = [{"foodname": foodname, "serving": serving, "cal":calc_total_cal(foodname,serving)} for foodname, serving in current_cart]
     return jsonify(data=cart_list)
 
         
@@ -245,31 +245,30 @@ def calculate():
     end_date=request.form.get("enddate")
 
     fetched_data= User.calculate(start_date,end_date)
-    print(fetched_data)
+    
     
     total=0
     total_cal_days={}
     response = {}
     for date, food_name, servings in fetched_data:
-        print(str(date),food_name,servings)
+        
         date=str(date)
         if date not in response:
             total_cal_days[date]=[]
             response[date] = []
         response[date].append({'food_name': food_name, 'servings': servings, 'totalcal': calc_total_cal(food_name,int(servings))})
         total_cal_days[date].append(calc_total_cal(food_name,int(servings)))
-    print(total_cal_days)
-    print(response)
+    
     
     avgcalories=[{date:sum(total_cal_days[date])} for date in total_cal_days]
-    print(avgcalories)
+    
     
     for item in avgcalories:
         for date in item:
             total+=item[date]
-    print(total)
+    
     total=total/len(avgcalories)
-    print(total)
+    
 
     
     return jsonify({'Food Log':response,'Total Calories':avgcalories,'avg calorie per day':total})

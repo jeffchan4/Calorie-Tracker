@@ -3,19 +3,21 @@
     
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/usercart_style.css') }}" />
     <div class="title">
-        <p class="intro">Hello, {{name}}! You're logged in! Email: {{email}}</p>
+        <p class="intro">CALORIE TRACKER</p>
+        
         <div class="flex">
-        <div><p>Google Profile Picture:</p><br>
-        <img src="{{profile_pic}}" alt="Google profile pic"></img></div><br>
-        <a class="button" href="/logout">Logout</a>
+        <div class="below-intro"><p>LOGGED IN AS: {{name}}:</p><br>
+        <img class='profilepic' src="{{profile_pic}}" alt="Google profile pic"></img></div>
+        <img class='winnie' src="https://media.giphy.com/media/jKaFXbKyZFja0/giphy.gif" alt="YOUR GIF">
+        <a class="button" href="/logout">LOGOUT</a>
         </div>
     </div>
     <div class="main">
+
     <div>
         <div>
-        <h1>Add Food to Your Cart</h1><br>
-        <!-- <input id="foodName" type="text" name="food_name" placeholder="food name"><br>
-         -->
+        
+    
         <select id="foodName"></select><br><br>
         <script>
             const select = document.getElementById('foodName');
@@ -37,6 +39,16 @@
         <button id="addFood"  >ADD FOOD </button><br><br>
         <!-- <button id="undoFood" onclick="undoFood()" >UNDO </button><br><br> -->
         <button id="delFood" >DELETE FOOD </button><br><br> <br>
+        <form action="/calculate" method="POST">
+            <h1>Food Log</h1>
+            <label >Start date:</label>
+            <input type="date" id="start_date" name="trip-start" value="2023-01-01" min="2023-01-01" max="2023-12-31" /><br>
+            <label >End date:</label>
+            <input type="date" id="end_date" name="trip-end" value="2023-01-01" min="2023-01-01" max="2023-12-31" /><br>
+            <button id="calendar-button" type="button">Calculate Avg Cal</button>
+            <div id="avg-calories"></div>
+            <div id="container"></div>
+        </form>
         <!-- <script>
 
             function addFood(){
@@ -103,9 +115,9 @@
                             data: JSON.stringify({ userId: userId, items: itemNames }),
                             contentType: 'application/json',
                             success: function(data) {
-                                $('#result').text(data.message);
-                                const debugInfo = `User ID: ${userId}<br>Item Names: ${itemNames.join(', ')}`;
-                                $('#debug-info').html(debugInfo);
+                                // $('#result').text(data.message);
+                                // const debugInfo = `User ID: ${userId}<br>Item Names: ${itemNames.join(', ')}`;
+                                // $('#debug-info').html(debugInfo);
 
                                 // After the POST request, fetch and update the cart data
                                 updateCart();
@@ -147,10 +159,13 @@
                         success: function(response) {
                             var dataList = response.data;
                             var ul = $('#cart1');
+                            var totalcal=0
 
                             dataList.forEach(function(item) {
-                                ul.append('<li>' + item.foodname + ' - ' + item.serving + ' servings' + '</li>');
+                                ul.append('<li>' + item.foodname + ' - ' + item.serving + ' servings ' + ' : '+ item.cal+ ' cal' +'</li>');
+                                totalcal += item.cal;
                             });
+                            $('#total-cal-today').text('Total Calories: ' + totalcal+' cal'); // Corrected this line
                         },
                         error: function(error) {
                             console.error('Error fetching data:', error);
@@ -166,6 +181,7 @@
         
     
     </div>
+    <div id="total-cal-today"></div>
     
     <form id="insert-form">
                  
@@ -184,17 +200,21 @@
                     success: function(response) {
                         var dataList = response.data;
                         var ul = $('#cart1');
+                        var totalcal = 0;
 
                         dataList.forEach(function(item) {
-                            ul.append('<li>' + item.foodname + ' - ' + item.serving + ' servings' +'</li>');
+                            ul.append('<li>' + item.foodname + ' - ' + item.serving + ' servings ' + ' : ' + item.cal + ' cal' + '</li>');
+                            totalcal += item.cal;
                         });
 
+                        $('#total-cal-today').text('Total Calories: ' + totalcal+' cal'); // Corrected this line
                     },
                     error: function(error) {
                         console.error('Error fetching data:', error);
                     }
                 });
             });
+
 
         </script>
         
@@ -204,16 +224,7 @@
     <div id="result"></div>
     <div id="debug-info"></div> <!-- Add a new div for debugging -->
 
-    <form action="/calculate" method="POST">
-    <h1>Food Log</h1>
-    <label >Start date:</label>
-    <input type="date" id="start_date" name="trip-start" value="2023-01-01" min="2023-01-01" max="2023-12-31" /><br>
-    <label >End date:</label>
-    <input type="date" id="end_date" name="trip-end" value="2023-01-01" min="2023-01-01" max="2023-12-31" /><br>
-    <button id="calendar-button" type="button">Calculate Avg Cal</button>
-    <div id="avg-calories"></div>
-    <div id="display-food-log"></div>
-    </form>
+    
     </div>
 
     
@@ -226,6 +237,29 @@
             
                 var startdate=$("#start_date").val();
                 var enddate=$("#end_date").val();
+                function createHTML(date, foodItems) {
+                    // Create a header for the date
+                    var dateHeader = document.createElement("h2");
+                    dateHeader.textContent = "Date: " + date;
+
+                    // Create an unordered list for food items
+                    var ul = document.createElement("ul");
+
+                    // Loop through the food items for the current date
+                    foodItems.forEach(function (item) {
+                        // Create a list item for each food item
+                        var li = document.createElement("li");
+                        li.textContent = item["food_name"] + " - Servings: " + item["servings"] + ", Total Calories: " + item["totalcal"];
+
+                        // Append the list item to the unordered list
+                        ul.appendChild(li);
+                    });
+
+                    // Append the date header and unordered list to the container
+                    var container = document.getElementById("container");
+                    container.appendChild(dateHeader);
+                    container.appendChild(ul);
+                }
 
                 $.ajax({
                     type: "POST",
@@ -234,11 +268,14 @@
                         startdate: startdate,
                         enddate: enddate
                     },
-                    success: function(response){
-                        var formattedResponse = JSON.stringify(response, null, 2); // Convert dictionary to formatted JSON string
-                        $("#display-food-log").html("<pre>" + formattedResponse + "</pre>");
-                        // $("#avg-calories").html(avgcalories)
-                    },
+                    success: function (data) {
+                    // Assuming data contains the dictionary
+                    for (var date in data["Food Log"]) {
+                        if (data["Food Log"].hasOwnProperty(date)) {
+                            createHTML(date, data["Food Log"][date]);
+                        }
+                    }
+                },
                     error: function(error){
                         $("#display-food-log").html("an error occurred ");
                     }
