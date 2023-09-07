@@ -237,7 +237,7 @@
             
                 var startdate=$("#start_date").val();
                 var enddate=$("#end_date").val();
-                function createHTML(date, foodItems) {
+                function createHTML(date, foodItems, totalcal) {
                     // Create a header for the date
                     var dateHeader = document.createElement("h2");
                     dateHeader.textContent = "Date: " + date;
@@ -249,17 +249,25 @@
                     foodItems.forEach(function (item) {
                         // Create a list item for each food item
                         var li = document.createElement("li");
-                        li.textContent = item["food_name"] + " - Servings: " + item["servings"] + ", Total Calories: " + item["totalcal"];
+                        li.textContent = item["food_name"] + " - " + item["servings"] + " servings " + " : " + item["totalcal"] + " cal";
 
                         // Append the list item to the unordered list
                         ul.appendChild(li);
                     });
 
-                    // Append the date header and unordered list to the container
-                    var container = document.getElementById("container");
-                    container.appendChild(dateHeader);
-                    container.appendChild(ul);
+                    // Create a div for total calories
+                    var totalCalDiv = document.createElement("div");
+                    totalCalDiv.textContent = "Total Calories: " + totalcal;
+
+                    // Append the date header, unordered list, and totalCalDiv to the container
+                    var container = $("#container"); // Access the element with jQuery
+                    
+                    container.append(dateHeader);
+                    container.append(ul);
+                    container.append(totalCalDiv);
+
                 }
+
 
                 $.ajax({
                     type: "POST",
@@ -269,13 +277,22 @@
                         enddate: enddate
                     },
                     success: function (data) {
+                    var container = $("#container"); // Access the element with jQuery
+                    container.empty(); // Clear its contents
                     // Assuming data contains the dictionary
-                    for (var date in data["Food Log"]) {
-                        if (data["Food Log"].hasOwnProperty(date)) {
-                            createHTML(date, data["Food Log"][date]);
+                    for (var i = 0; i < data["Total Calories"].length; i++) {
+                        var totalCaloriesObj = data["Total Calories"][i];
+
+                        for (var date in totalCaloriesObj) {
+                            if (totalCaloriesObj.hasOwnProperty(date)) {
+                                var totalCalories = totalCaloriesObj[date]; // Access total calories for the current date
+                                createHTML(date, data["Food Log"][date], totalCalories);
+                            }
                         }
                     }
                 },
+
+
                     error: function(error){
                         $("#display-food-log").html("an error occurred ");
                     }
