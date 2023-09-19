@@ -28,33 +28,26 @@ select {
     transition: background-color 1s;
     
 }
-/* #undoFood{
-    font-family: 'Courier New', Courier, monospace;
-    font-weight:bolder;
-    padding:10px;
-    border-radius:10px;
-    box-shadow: 5px;
-    background-color: rgb(250, 250, 136);
-}
-#undoFood:hover{
-    background-color: yellow ;
-    transition: background-color 1s;
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-size:30px;
-} */
-#delFood{
-    font-family: 'Courier New', Courier, monospace;
-    font-weight:bolder;
-    padding:10px;
-    border-radius:10px;
-    box-shadow: 5px;
-    background-color: rgb(254, 121, 121);
-}
-#delFood:hover{
-    background-color: red ;
-    transition: background-color 1s;
+
+.delete-button {
     
+    background-color: transparent;
+    border: 2px solid red; /* Add a border with red color */
+    border-radius: 50%; /* Make it circular */
+    width: 24px; /* Adjust width to make it smaller */
+    height: 24px; /* Adjust height to make it smaller */
+    font-size: 16px; /* Adjust font size as needed */
+    cursor: pointer;
+    color: red; /* Adjust color as needed */
+    margin-left: 5px; /* Add spacing between button and item */
 }
+
+.delete-button:hover {
+    color: darkred;
+    border-color: darkred; /* Change border color on hover */
+}
+
+
 .title{
     text-align: center;
     

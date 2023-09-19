@@ -3,7 +3,7 @@ import json
 import os
 import sqlite3
 import pandas as pd ##csv library
-from datetime import date
+from datetime import date, timedelta
 import time
 import threading
 
@@ -23,6 +23,7 @@ import requests
 from db import init_db_command
 from user import User
 
+
 today = None
 
 # Function to update the date in the background
@@ -31,7 +32,7 @@ def update_date():
     
     while True:
         today = date.today()  # Update the global variable
-        print("Today's date:", today)
+        # print("Today's date:", today)
         time.sleep(600)
 
 # Create a separate thread for date updating
@@ -47,6 +48,7 @@ os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 # Configuration
 # GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
 # GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
+
 GOOGLE_CLIENT_ID = '933991065946-eitvj152481hamaebbajn64jn7bjraov.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = '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'
 GOOGLE_DISCOVERY_URL = (
@@ -109,7 +111,7 @@ def login():
         redirect_uri=request.base_url + "/callback",
         scope=["openid", "email", "profile"],
     )
-
+    
     
     return redirect(request_uri)
 
@@ -190,10 +192,22 @@ def current_cart():
     user = User(
         id_=current_user.id, name=current_user.name, email=current_user.email, profile_pic=current_user.profile_pic
     )
-        
-    current_cart = User.get_cart(today)  # Assuming `today` is correctly defined
+    # print(current_user.id,current_user.name,current_user.email)
+    allusers = User.get_all_users()
+    # allfoods= User.get_all_food()
     
-    cart_list = [{"foodname": foodname, "serving": serving, "cal":calc_total_cal(foodname,serving)} for foodname, serving in current_cart]
+    user_list = [dict(row) for row in allusers]
+    
+    # Serialize the list of dictionaries to JSON
+    json_string = json.dumps(user_list)
+    
+    # Now, you can print the JSON string
+    # print(json_string)
+    # print(allfoods)
+        
+    current_cart = User.get_cart(today, current_user.id)  # Assuming `today` is correctly defined
+    
+    cart_list = [{"foodname": foodname, "serving": serving, "cal":calc_total_cal(foodname,serving), "id":id} for foodname, serving, id in current_cart]
     return jsonify(data=cart_list)
 
         
@@ -210,8 +224,8 @@ def insert_items():
         user_id = data['userId']
         item_names = data['items']
         
-        print(item_names)
-        print(today)
+        
+        
         # conn=db_connection()
         # cursor = conn.cursor()
         user_id_to_query=user_id
@@ -222,14 +236,14 @@ def insert_items():
         # Assuming you have a "items" table with "user_id" and "item_name" columns
         for item_name in item_names:
             items = item_name.split(':')
-            print(items)
+            
             food_name = items[0]
-            print(food_name)
+            
             serving_num = items[1].replace("servings",'').strip()
-            print(serving_num)
+            
             User.insert(user_id_to_query,food_name,serving_num,today)
             
-
+        print('successfully inserrted')
         return jsonify(message='Items inserted successfully')
     except Exception as e:
         return jsonify(error=str(e))
@@ -239,12 +253,14 @@ def calculate():
     user = User(
         id_=current_user.id, name=current_user.name, email=current_user.email, profile_pic=current_user.profile_pic
     )
-    # try:
-        
-    start_date=request.form.get("startdate")
-    end_date=request.form.get("enddate")
+    
+    data = request.get_json()
+    range = data['range']
+    print(range)
+    start = today - timedelta(days=range)
+    
 
-    fetched_data= User.calculate(start_date,end_date)
+    fetched_data= User.calculate(start, today, current_user.id)
     
     
     total=0
@@ -282,20 +298,25 @@ def delete_food():
     )
     data=request.get_json()
     print(data)
-    food=data['foodName']
-    serving=data['foodServing']
-    print(food)
-    print(serving)
+    foodid=data['itemId']
+    
+    # food=data['foodName']
+    # serving=data['foodServing']
+    # print(food)
+    # print(serving)
 
-    User.delete_food(food,serving,today)
-    return jsonify(message='Items was DELETED')
+    User.delete_food(foodid)
+    print('the items were deleted')
+    return(jsonify(message="successful deletion"))
+
+
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
 def calc_total_cal(food,servings):
     
     startindex=0
-    print(df.loc[startindex]['Food'])
+    
     while startindex<=len(df):
         if  df.loc[startindex]['Food']== food:
             break
@@ -305,7 +326,12 @@ def calc_total_cal(food,servings):
     
     return totalcal*servings
     
+## testing
+
+# if __name__ == "__main__":
+#     app.run(debug=True)
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
