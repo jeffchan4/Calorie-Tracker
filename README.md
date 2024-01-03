@@ -1,7 +1,7 @@
 
-# Foobar
+# Calorie Tracker
 
-Foobar is a Python library for dealing with word pluralization.
+Calorie Tracker is a web app that helps track your daily calorie intake, and monitors your food log 
 
 ## Installation
 
