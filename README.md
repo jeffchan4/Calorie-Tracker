@@ -6,8 +6,18 @@ Calorie Tracker is a web app that helps track your daily calorie intake and moni
 ## How To Use
 
 The User will be prompted to a Google Login when they access the website.
+
 <img width="712" alt="Screen Shot 2024-01-04 at 9 24 18 AM" src="https://github.com/jeffchan4/Calorie-Tracker/assets/112337204/afeee872-191d-4a1f-8939-6db1c1cdd503">
 
 
+
 After a successful authentication, the user will be displayed their food log with their calories for today.
+
 <img width="712" alt="Screen Shot 2024-01-04 at 9 24 43 AM" src="https://github.com/jeffchan4/Calorie-Tracker/assets/112337204/d70044b4-c60a-4aed-a10d-085e12f27510">
+
+The user can track their foods and calories up to the past year.
+
+<img width="712" alt="Screen Shot 2024-01-04 at 9 25 08 AM" src="https://github.com/jeffchan4/Calorie-Tracker/assets/112337204/05671e30-d77b-4eec-b4e7-965c551c8e55">
+
+
+
