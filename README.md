@@ -25,7 +25,10 @@ The user can track their foods and calories up to the past year and can log off 
 
 
 
-https://github.com/jeffchan4/Calorie-Tracker/assets/112337204/74e122e3-059b-4928-b142-192e650b34a0
+
+https://github.com/jeffchan4/Calorie-Tracker/assets/112337204/cb8ea581-7d2c-49ef-a745-f2e5ca24d221
+
+
 
 
 
