@@ -4,20 +4,30 @@
 Calorie Tracker is a web app that helps track your daily calorie intake and monitors your food log all year round. It incorporated Google OAuth 2.0 authentication, Heroku for website deployment, Flask, HTML, CSS, JavaScript, AJAX, SQLite, and a CSV file as a local database of food items. Some challenges faced was initializing Google Authentication as this was the first time I was introduced to how authentication works. Another obstacle experienced was finding a database of food that was diverse. Some future features I hope to implement is using user's body metrics to help monitor their calorie intake, whether it be displaying if the user exceeded their daily recommended calorie intake, and displaying a visualization of the user's calorie intake on a certain period of time.
 
 ## How To Use
-
-The User will be prompted to a Google Login when they access the website.
-
-<img width="712" alt="Screen Shot 2024-01-04 at 9 24 18 AM" src="https://github.com/jeffchan4/Calorie-Tracker/assets/112337204/afeee872-191d-4a1f-8939-6db1c1cdd503">
+### Login
+The user will be prompted to a Google Login when they access the website. After a successful authentication, the user will be displayed their food log with their calories for today.
 
 
+https://github.com/jeffchan4/Calorie-Tracker/assets/112337204/9fa911ee-876b-493f-aa64-d7b3951c506f
 
-After a successful authentication, the user will be displayed their food log with their calories for today.
 
-<img width="712" alt="Screen Shot 2024-01-04 at 9 24 43 AM" src="https://github.com/jeffchan4/Calorie-Tracker/assets/112337204/d70044b4-c60a-4aed-a10d-085e12f27510">
 
-The user can track their foods and calories up to the past year.
+### Insert Foods
+Foods can be added and removed from today's food log and food type with number of servings can be adjusted accordingly.
 
-<img width="712" alt="Screen Shot 2024-01-04 at 9 25 08 AM" src="https://github.com/jeffchan4/Calorie-Tracker/assets/112337204/05671e30-d77b-4eec-b4e7-965c551c8e55">
+
+
+https://github.com/jeffchan4/Calorie-Tracker/assets/112337204/2e005083-b61f-4216-9f86-519b0201573e
+
+
+### Previous Logs
+The user can track their foods and calories up to the past year and can log off when they are finished with using the app.
+
+
+
+https://github.com/jeffchan4/Calorie-Tracker/assets/112337204/74e122e3-059b-4928-b142-192e650b34a0
+
+
 
 
 
